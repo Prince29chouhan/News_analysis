@@ -4,6 +4,10 @@ from utils import text_to_speech
 import time
 import base64
 
+import nltk
+nltk.download('punkt')
+
+
 # Function to play audio automatically
 def autoplay_audio(file_path):
     with open(file_path, "rb") as audio_file:
