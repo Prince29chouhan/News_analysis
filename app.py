@@ -1,11 +1,21 @@
+import os
+import nltk
+
+# Download punkt tokenizer for NLTK at deploy-time if not present
+nltk_data_dir = "/app/nltk_data"
+if not os.path.exists(nltk_data_dir):
+    os.makedirs(nltk_data_dir)
+
+nltk.download("punkt", download_dir=nltk_data_dir)
+nltk.data.path.append(nltk_data_dir)
+
 import streamlit as st
 from api import get_news, NewsRequest
 from utils import text_to_speech
 import time
 import base64
 
-import nltk
-nltk.download('punkt')
+
 
 
 # Function to play audio automatically

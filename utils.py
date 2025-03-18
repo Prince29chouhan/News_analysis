@@ -1,5 +1,11 @@
 import requests
 import nltk
+from nltk.tokenize.punkt import PunktSentenceTokenizer
+import sumy.nlp.tokenizers
+
+# Monkey patch sumy tokenizer
+sumy.nlp.tokenizers.Tokenizer._sentence_tokenizer = PunktSentenceTokenizer()
+
 from bs4 import BeautifulSoup
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
@@ -8,11 +14,6 @@ from nltk.sentiment import SentimentIntensityAnalyzer
 from deep_translator import GoogleTranslator
 import gtts
 import os
-import nltk
-nltk.download('punkt', download_dir='./nltk_data')
-nltk.data.path.append('./nltk_data')
-
-
 
 nltk.download('vader_lexicon')
 
@@ -41,7 +42,8 @@ def fetch_news(company):
                 "summary": summary,
                 "link": item["url"],
                 "published_at": item["publishedAt"],
-                "source": item["source"]["name"]
+                "source": item["source"]["name"],
+                "sentiment": analyze_sentiment(item["title"] + " " + (summary or ""))
             })
     return articles
 
@@ -79,7 +81,7 @@ def analyze_sentiment(text):
 def translate_to_hindi(text):
     return GoogleTranslator(source='en', target='hi').translate(text)
 
-# Function to convert **headlines only** to speech
+# Function to convert headlines to speech
 def text_to_speech(text, filename="news_headline.mp3"):
     if not text.strip():
         return None
