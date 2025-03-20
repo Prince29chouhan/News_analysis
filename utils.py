@@ -1,10 +1,7 @@
 import requests
-import nltk
-from nltk.tokenize.punkt import PunktSentenceTokenizer
-import sumy.nlp.tokenizers
 
-# Monkey patch sumy tokenizer
-sumy.nlp.tokenizers.Tokenizer._sentence_tokenizer = PunktSentenceTokenizer()
+import nltk
+nltk.data.path.append('./nltk_data')
 
 from bs4 import BeautifulSoup
 from sumy.parsers.plaintext import PlaintextParser
