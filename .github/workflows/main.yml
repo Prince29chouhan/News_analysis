@@ -3,8 +3,6 @@ name: Sync to Hugging Face hub
 on:
   push:
     branches: [main]
-
-  # To run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -15,7 +13,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Push to hub
+      - name: Set Git Config
+        run: |
+          git config --global user.email "pri1229nce@gmail.com"
+          git config --global user.name "Prince-29"
+
+      - name: Push to Hugging Face hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://Prince-29:${HF_TOKEN}@huggingface.co/spaces/Prince-29/news-sentiment-analyzer main
+        run: |
+          git remote set-url origin https://Prince-29:${HF_TOKEN}@huggingface.co/spaces/Prince-29/news-sentiment-analyzer
+          git push --force origin main
